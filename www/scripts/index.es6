@@ -2,7 +2,7 @@
 
 function mintSingleCap(capValue, keypair) {
     let $el = $('<div class="row list-group-item-text"></div>');
-    let $canvas = $('<canvas class="col-xs-4"></canvas>');
+    let $canvas = $('<canvas class="qrcode col-xs-4"></canvas>');
     let address = keypair.getAddress();
     let priv = bitcoin.base58.encode(keypair.d.toBuffer(32));
     let capUri = `http://btcp.trade/${address}:${priv}`;
@@ -48,5 +48,27 @@ $(document).ready(() => {
             $li.append($cap);
             $capsOutput.append($li);
         }
+        let $qrCodes = $capsOutput.find('canvas.qrcode');
+        let $canvas = $('<canvas></canvas>');
+        let height = $qrCodes.attr('height');
+        $canvas.attr('height', height * $qrCodes.length);
+        let ctx = $canvas[0].getContext('2d');
+        $qrCodes.each((i, $qrCode) => {
+            let qrCodeDataURL = $qrCode.toDataURL();
+            let image = new Image();
+            image.onload = () => {
+                ctx.drawImage(image, 0, height * i);
+            };
+            image.src = qrCodeDataURL;
+        });
+        let $printable = $('#printable');
+
+        let $link = $(`<a class="btn btn-default btn-lg btn-block">Download</a>`);
+        $link.click((e) => {
+            let canvasDataURL = $canvas[0].toDataURL('image/png');
+            $link.attr('href', canvasDataURL);
+            $link.attr('download', 'bottlecaps.png');
+        });
+        $printable.append($link);
     });
 });
