@@ -11,7 +11,7 @@ WORKDIR /app/www
 
 RUN npm install -g bower
 ADD www/bower.json /app/www
-RUN bower install
+RUN bower install --allow-root
 
 WORKDIR /app
 
