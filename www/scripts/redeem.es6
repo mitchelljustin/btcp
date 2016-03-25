@@ -34,11 +34,8 @@ function doTransaction(keypair, toAddress, callback) {
             let txHex = txBuilder.build().toHex();
             $.ajax({
                 method: 'POST',
-                url: 'https://webbtc.com/relay_tx',
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                },
-                data: `tx=${txHex}`,
+                url: 'http://btc.blockr.io/api/v1/tx/push',
+                data: {hex: txHex},
             })
                 .done((res) => {
                     res = JSON.parse(res);
@@ -76,15 +73,12 @@ function updateBalances(addr) {
 
             let unconfirmedBalance = +res.unconfirmed_balance || 0;
             if (unconfirmedBalance !== 0) {
+                $unconfirmedBalance.show();
                 $unconfirmedBalance.find('span.value').text(unconfirmedBalance / 100);
-            }
-            else {
-                $unconfirmedBalance.hide();
             }
         })
         .error(() => {
-            $confirmedBalance.text(0);
-            $unconfirmedBalance.text(0);
+            $confirmedBalance.find('span.value').text(0);
         });
 }
 $(document).ready(() => {
@@ -110,7 +104,7 @@ $(document).ready(() => {
         return;
     }
     $('#alerts').append(`
-        <div class="alert alert-success" role="alert">Bitcoin Bottlecap verified</div>
+        <div class="alert alert-success" role="alert">Bottlecap verified</div>
     `);
     let $redeemButton = $('#redeemButton');
     let $redeemForm = $('#redeemForm');
@@ -121,17 +115,23 @@ $(document).ready(() => {
         e.preventDefault();
         let $redeemAddress = $('#redeemAddress');
         let address = $redeemAddress.val();
-        doTransaction(keypair, address, (err, res) => {
-            $redeemAddress.val('');
-            if (!err && res) {
-                console.log(JSON.stringify(res));
-            }
-            else {
-                $('#alerts').append(`
-                    <div class="alert alert-danger" role="alert">Transaction error: ${err}</div>
-                `);
-            }
-        });
+        try {
+            doTransaction(keypair, address, (err, res) => {
+                $redeemAddress.val('');
+                if (!err && res) {
+                    console.log(JSON.stringify(res));
+                }
+                else {
+                    $('#alerts').append(`
+                        <div class="alert alert-danger" role="alert">Transaction error: ${err}</div>
+                    `);
+                }
+            });
+        } catch(err) {
+            $('#alerts').append(`
+                <div class="alert alert-danger" role="alert">Transaction error: ${err.message}</div>
+            `);
+        }
     });
     let $downloadWIF = $redeemForm.find('#downloadWIFButton');
     $downloadWIF.click(() => {
