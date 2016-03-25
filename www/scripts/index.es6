@@ -31,7 +31,10 @@ function mintSingleCap(capValue, keypair) {
     `);
 
     $el.append($controls);
-    return $el;
+    return {
+        $el,
+        address
+    };
 }
 
 $(document).ready(() => {
@@ -41,12 +44,14 @@ $(document).ready(() => {
         $capsOutput.html('');
         let capsAmount = +$('#capsAmountInput').val();
         let capsValue = +$('#capsValueInput').val();
+        let addresses = [];
         for (let i = 0; i < capsAmount; i++) {
             let keypair = bitcoin.bitcoin.ECPair.makeRandom();
-            let $cap = mintSingleCap(capsValue, keypair);
+            let cap = mintSingleCap(capsValue, keypair);
             let $li = $('<li class="list-group-item"></li>');
-            $li.append($cap);
+            $li.append(cap.$el);
             $capsOutput.append($li);
+            addresses.push(cap.address);
         }
         let $qrCodes = $capsOutput.find('canvas.qrcode');
         let $canvas = $('<canvas></canvas>');
@@ -64,10 +69,11 @@ $(document).ready(() => {
         let $printable = $('#printable');
 
         let $link = $(`<a class="btn btn-default btn-lg btn-block">Download</a>`);
-        $link.click((e) => {
+        $link.click(() => {
             let canvasDataURL = $canvas[0].toDataURL('image/png');
             $link.attr('href', canvasDataURL);
-            $link.attr('download', 'bottlecaps.png');
+            let hash = bitcoin.bitcoin.crypto.hash160(addresses.join(''));
+            $link.attr('download', `btcp-${bitcoin.base58.encode(hash)}.png`);
         });
         $printable.append($link);
     });
