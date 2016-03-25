@@ -11,6 +11,9 @@ function doTransaction(keypair, toAddress, callback) {
         .done((res) => {
             res.transactions.forEach((tx) => {
                 tx.outputs.forEach((output, i) => {
+                    if (output.spent) {
+                        return;
+                    }
                     txBuilder.addInput(tx.hash, i);
                     amount += output.amount;
                 });
@@ -29,7 +32,14 @@ function doTransaction(keypair, toAddress, callback) {
             });
 
             let txHex = txBuilder.build().toHex();
-            $.post(`https://bitcoin.toshi.io/api/v0/transactions`, {hex: txHex})
+            $.ajax({
+                method: 'POST',
+                url: 'https://webbtc.com/relay_tx',
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                },
+                data: `tx=${txHex}`,
+            })
                 .done((res) => {
                     res = JSON.parse(res);
                     if (res.error) {
@@ -39,7 +49,7 @@ function doTransaction(keypair, toAddress, callback) {
                     }
                 })
                 .error((err) => {
-                    callback(err);
+                    callback(JSON.stringify(err));
                 });
         })
         .error((err) => {
@@ -86,8 +96,9 @@ $(document).ready(() => {
         return;
     }
     let addr = addrAndPriv[0];
+    $('#address').text(addr);
     updateBalances(addr);
-    setInterval(() => updateBalances(addr), 2500);
+    setInterval(() => updateBalances(addr), 15 * 1000);
     let priv = addrAndPriv[1];
     let privBuffer = bitcoin.base58.decode(priv);
     let d = bitcoin.BigInteger.fromBuffer(privBuffer);
