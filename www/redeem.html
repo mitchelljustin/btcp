@@ -25,22 +25,25 @@
     </div>
     <div class="row">
         <div class="col-sm-8 col-sm-push-2">
-            <h2>
-                <small>Confirmed</small>
+            <h2 id="confirmedBalance">
+                <small>Value</small>
                 <span class="pull-right">
-                    <span id="confirmedBalance" style="color: #272"></span>
+                    <span class="value" style="color: #272"></span>
                     <span>ƀ</span>
                 </span>
             </h2>
-            <h2>
-                <small>Unconfirmed</small>
+            <h2 id="unconfirmedBalance">
+                <small>Unconfirmed Value</small>
                 <span class="pull-right">
-                    <span id="unconfirmedBalance" style="color: #A22"></span>
+                    <span class="value" style="color: #A22"></span>
                     <span>ƀ</span>
                 </span>
             </h2>
-            <form id="redeemForm" class="row" style="display: none;">
-                <h3>Redeem Cap</h3>
+            <button id="redeemButton" class="btn btn-block btn-default">
+                Redeem Cap
+                <i class="glyphicon glyphicon-chevron-down"></i>
+            </button>
+            <form id="redeemForm" class="row" style="display: none; padding-top: 15px">
                 <input type="text"
                        id="redeemAddress"
                        placeholder="Bitcoin Address"
@@ -50,7 +53,7 @@
                         type="submit"
                         class="btn btn-primary btn-block"
                         value="Redeem">
-                <a id="downloadWIFButton" class="btn btn-default btn-lg btn-block">
+                <a id="downloadWIFButton" class="btn btn-success btn-block">
                     Download WIF
                 </a>
             </form>

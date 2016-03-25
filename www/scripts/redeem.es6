@@ -62,9 +62,15 @@ function updateBalances(addr) {
     $.get(`https://bitcoin.toshi.io/api/v0/addresses/${addr}`)
         .done((res) => {
             let balance = +res.balance || 0;
+            $confirmedBalance.find('span.value').text(balance / 100);
+
             let unconfirmedBalance = +res.unconfirmed_balance || 0;
-            $confirmedBalance.text(balance / 100);
-            $unconfirmedBalance.text(unconfirmedBalance / 100);
+            if (unconfirmedBalance !== 0) {
+                $unconfirmedBalance.find('span.value').text(unconfirmedBalance / 100);
+            }
+            else {
+                $unconfirmedBalance.hide();
+            }
         })
         .error(() => {
             $confirmedBalance.text(0);
@@ -95,8 +101,11 @@ $(document).ready(() => {
     $('#alerts').append(`
         <div class="alert alert-success" role="alert">Bitcoin Bottlecap verified</div>
     `);
+    let $redeemButton = $('#redeemButton');
     let $redeemForm = $('#redeemForm');
-    $redeemForm.slideDown('fast');
+    $redeemButton.click(() => {
+        $redeemForm.slideToggle('fast');
+    });
     $redeemForm.submit((e) => {
         e.preventDefault();
         let $redeemAddress = $('#redeemAddress');
