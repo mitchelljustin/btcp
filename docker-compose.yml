@@ -1,4 +1,6 @@
 www:
   build: .
+  environment:
+    PORT: 80
   ports: 
     - "80:80"

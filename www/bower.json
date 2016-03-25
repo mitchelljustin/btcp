@@ -1,0 +1,23 @@
+{
+  "name": "btcp",
+  "homepage": "http://btcp.trade",
+  "authors": [
+    "Mitchell Van Der Hoeff <mitchellvanderhoeff@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.2",
+    "qr-js": "^1.1.4"
+  }
+}

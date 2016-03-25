@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+'use strict';
+
+require('localenv');
+
+let path = require('path');
+let express = require('express');
+let bodyParser = require('body-parser');
+
+let app = express();
+
+app.use(bodyParser.json());
+
+let staticDir = path.join(__dirname, 'www');
+app.use(express.static(staticDir));
+
+let mainRouter = require('../src/router');
+app.use(mainRouter);
+
+let port = process.env.PORT || 8000;
+app.listen(port, () => {
+    console.log(`Liste  ning on ${port}`);
+});
