@@ -12,13 +12,17 @@ let app = express();
 
 app.use(bodyParser.json());
 
-let staticDir = path.join(__dirname, 'www');
+let staticDir = path.resolve(path.join(process.cwd(), 'www'));
 app.use(express.static(staticDir));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve('./www/index.html'));
+});
 
 let mainRouter = require('../src/router');
 app.use(mainRouter);
 
 let port = process.env.PORT || 8000;
 app.listen(port, () => {
-    console.log(`Liste  ning on ${port}`);
+    console.log(`Listening on ${port}`);
 });
