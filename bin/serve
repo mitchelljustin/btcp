@@ -12,11 +12,15 @@ let app = express();
 
 app.use(bodyParser.json());
 
-let staticDir = path.resolve(path.join(process.cwd(), 'www'));
+let staticDir = path.resolve('./www');
 app.use(express.static(staticDir));
 
 app.get('/', (req, res) => {
     res.sendFile(path.resolve('./www/index.html'));
+});
+
+app.get('/:data', (req, res) => {
+    res.sendFile(path.resolve('./www/redeem.html'));
 });
 
 let mainRouter = require('../src/router');

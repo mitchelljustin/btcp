@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Bitcoin Bottlecaps</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/qr-js/qr.js"></script>
+    <script src="scripts/bitcoin.js"></script>
+    <script src="scripts/redeem.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h1 class="col-sm-4 text-center">
+            <i class="glyphicon glyphicon-record">
+            </i>
+            <span>btcp.trade</span>
+        </h1>
+    </div>
+    <hr/>
+    <div id="alerts">
+
+    </div>
+    <div class="row">
+        <div class="col-sm-8 col-sm-push-2">
+            <h2>
+                <small>Confirmed</small>
+                <span class="pull-right">
+                    <span id="confirmedBalance" style="color: #272"></span>
+                    <span>ƀ</span>
+                </span>
+            </h2>
+            <h2>
+                <small>Unconfirmed</small>
+                <span class="pull-right">
+                    <span id="unconfirmedBalance" style="color: #A22"></span>
+                    <span>ƀ</span>
+                </span>
+            </h2>
+            <form id="redeemForm" class="row" style="display: none;">
+                <h3>Redeem Cap</h3>
+                <input type="text"
+                       id="redeemAddress"
+                       placeholder="Bitcoin Address"
+                       class="form-control input-lg"
+                >
+                <input
+                        type="submit"
+                        class="btn btn-primary btn-block"
+                        value="Redeem">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
