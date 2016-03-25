@@ -75,22 +75,28 @@ $(document).ready(function () {
     var keypair = new bitcoin.bitcoin.ECPair(d);
     if (keypair.getAddress() !== addr) {
         $('#alerts').append('\n            <div class="alert alert-danger" role="alert">Private key does not match address</div>\n        ');
-    } else {
-        $('#alerts').append('\n            <div class="alert alert-success" role="alert">Bitcoin Bottlecap verified</div>\n        ');
-        var $redeemForm = $('#redeemForm');
-        $redeemForm.slideDown('fast');
-        $redeemForm.submit(function (e) {
-            e.preventDefault();
-            var $redeemAddress = $('#redeemAddress');
-            var address = $redeemAddress.val();
-            doTransaction(keypair, address, function (err, res) {
-                $redeemAddress.val('');
-                if (!err && res) {
-                    console.log(JSON.stringify(res));
-                } else {
-                    $('#alerts').append('\n                        <div class="alert alert-danger" role="alert">Transaction error: ' + err + '</div>\n                    ');
-                }
-            });
-        });
+        return;
     }
+    $('#alerts').append('\n        <div class="alert alert-success" role="alert">Bitcoin Bottlecap verified</div>\n    ');
+    var $redeemForm = $('#redeemForm');
+    $redeemForm.slideDown('fast');
+    $redeemForm.submit(function (e) {
+        e.preventDefault();
+        var $redeemAddress = $('#redeemAddress');
+        var address = $redeemAddress.val();
+        doTransaction(keypair, address, function (err, res) {
+            $redeemAddress.val('');
+            if (!err && res) {
+                console.log(JSON.stringify(res));
+            } else {
+                $('#alerts').append('\n                    <div class="alert alert-danger" role="alert">Transaction error: ' + err + '</div>\n                ');
+            }
+        });
+    });
+    var $downloadWIF = $redeemForm.find('#downloadWIFButton');
+    $downloadWIF.click(function () {
+        var wif = keypair.toWIF();
+        $downloadWIF.attr('href', 'data:text/plain,' + wif);
+        $downloadWIF.attr('download', addr + '.wif');
+    });
 });

@@ -90,27 +90,33 @@ $(document).ready(() => {
         $('#alerts').append(`
             <div class="alert alert-danger" role="alert">Private key does not match address</div>
         `);
-    } else {
-        $('#alerts').append(`
-            <div class="alert alert-success" role="alert">Bitcoin Bottlecap verified</div>
-        `);
-        let $redeemForm = $('#redeemForm');
-        $redeemForm.slideDown('fast');
-        $redeemForm.submit((e) => {
-            e.preventDefault();
-            let $redeemAddress = $('#redeemAddress');
-            let address = $redeemAddress.val();
-            doTransaction(keypair, address, (err, res) => {
-                $redeemAddress.val('');
-                if (!err && res) {
-                    console.log(JSON.stringify(res));
-                }
-                else {
-                    $('#alerts').append(`
-                        <div class="alert alert-danger" role="alert">Transaction error: ${err}</div>
-                    `);
-                }
-            });
-        });
+        return;
     }
+    $('#alerts').append(`
+        <div class="alert alert-success" role="alert">Bitcoin Bottlecap verified</div>
+    `);
+    let $redeemForm = $('#redeemForm');
+    $redeemForm.slideDown('fast');
+    $redeemForm.submit((e) => {
+        e.preventDefault();
+        let $redeemAddress = $('#redeemAddress');
+        let address = $redeemAddress.val();
+        doTransaction(keypair, address, (err, res) => {
+            $redeemAddress.val('');
+            if (!err && res) {
+                console.log(JSON.stringify(res));
+            }
+            else {
+                $('#alerts').append(`
+                    <div class="alert alert-danger" role="alert">Transaction error: ${err}</div>
+                `);
+            }
+        });
+    });
+    let $downloadWIF = $redeemForm.find('#downloadWIFButton');
+    $downloadWIF.click(() => {
+        let wif = keypair.toWIF();
+        $downloadWIF.attr('href', `data:text/plain,${wif}`);
+        $downloadWIF.attr('download', `${addr}.wif`);
+    });
 });
