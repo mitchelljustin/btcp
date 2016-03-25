@@ -13,12 +13,17 @@
 <body>
 <div class="container">
     <div class="row">
-        <h1 class="col-sm-4 text-center">
-            <i class="glyphicon glyphicon-record">
-            </i>
-            <span>Bitcoin Bottlecaps</span>
-        </h1>
-        <div class="col-sm-8">
+        <div class="col-sm-4 text-center">
+            <h1>
+                <i class="glyphicon glyphicon-record">
+                </i>
+                <span>Bitcoin Bottlecaps</span>
+            </h1>
+            <h4>
+                <a href="/">Mint your own Bottlecaps</a>
+            </h4>
+        </div>
+        <div class="col-sm-8" style="padding-top: 10px;">
             <p>
                 Bitcoin Bottlecaps is an easy way to bring virtual value from
                 <a href="https://en.wikipedia.org/wiki/Bitcoin">Bitcoin</a>
@@ -67,9 +72,11 @@
     <div class="row">
         <div class="col-sm-8 col-sm-push-2">
             <ul id="capsOutput" class="list-group">
-
             </ul>
-            <div id="printable">
+            <div id="printable" style="display: none;">
+                <a id="printableLink" class="btn btn-default btn-lg btn-block">
+                    Download Printable
+                </a>
             </div>
         </div>
     </div>

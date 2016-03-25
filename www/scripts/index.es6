@@ -14,19 +14,12 @@ function mintSingleCap(capValue, keypair) {
     let $controls = $('<div class="col-xs-8"> </div>');
     $controls.append(`
         <div class="row">
-            <div><small>${address}</small></div>
-            <div>
-                <strong>Value</strong> 
-                <span>${capValue}ƀ</span>
-            </div>
-        </div>
-    `);
-    $controls.append(`
-        <div class="row">
-            <a class="btn btn-success btn-sm btn-block"
-                href="bitcoin:${address}?amount=${capValue / 1e6}">
-                Fund
-            </a>
+            <div><h5>${address}</h5></div>
+            <h4>
+                <a href="bitcoin:${address}?amount=${capValue / 1e6}">
+                    Fund ${capValue} bits
+                </a>
+            </h4>
         </div>
     `);
 
@@ -66,15 +59,14 @@ $(document).ready(() => {
             };
             image.src = qrCodeDataURL;
         });
-        let $printable = $('#printable');
 
-        let $link = $(`<a class="btn btn-default btn-lg btn-block">Download</a>`);
-        $link.click(() => {
+        $('#printable').show();
+        let $printableLink = $("#printableLink");
+        $printableLink.click(() => {
             let canvasDataURL = $canvas[0].toDataURL('image/png');
-            $link.attr('href', canvasDataURL);
+            $printableLink.attr('href', canvasDataURL);
             let hash = bitcoin.bitcoin.crypto.hash160(addresses.join(''));
-            $link.attr('download', `btcp-${bitcoin.base58.encode(hash)}.png`);
+            $printableLink.attr('download', `btcp-${bitcoin.base58.encode(hash)}.png`);
         });
-        $printable.append($link);
     });
 });
